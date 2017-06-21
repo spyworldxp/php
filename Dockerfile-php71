@@ -36,7 +36,9 @@ RUN apt-get update && apt-get install -y \
 		snmp \
 		libaio1 \
 		libmemcached-dev \
-		libmagickwand-dev
+		libmagickwand-dev \
+		poppler-utils \
+		ghostscript
 
 RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h
 
@@ -48,7 +50,7 @@ RUN docker-php-ext-configure imap --with-imap --with-imap-ssl --with-kerberos
 RUN docker-php-ext-install imap
 RUN docker-php-ext-configure pdo_dblib --with-libdir=/lib/x86_64-linux-gnu
 RUN docker-php-ext-install pdo_dblib
-RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+RUN docker-php-ext-configure gd --enable-gd-native-ttf --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
 RUN docker-php-ext-install gd
 
 RUN docker-php-ext-install bcmath bz2 calendar ctype curl dba dom enchant exif fileinfo ftp \
@@ -75,6 +77,9 @@ RUN docker-php-ext-configure oci8 --with-oci8=instantclient,/usr/local/instantcl
 
 RUN docker-php-ext-install oci8
 
+RUN docker-php-ext-configure pdo_oci  --with-pdo-oci=instantclient,/usr/local/instantclient/,12.1
+RUN docker-php-ext-install pdo_oci
+
 # RUN set -x \
 #     && cd /usr/src/php/ext/odbc \
 #     && phpize \
@@ -86,7 +91,7 @@ RUN docker-php-ext-install oci8
 # && docker-php-ext-configure odbc --with-unixODBC=shared,/usr \
 # && docker-php-ext-install odbc
 
-# filter pdo_oci reflection spl standard xmlreader pdo_oci
+# filter reflection spl standard xmlreader
 # 		
 # 		libfreetype6-dev \
 # 		zip \
@@ -113,11 +118,11 @@ RUN php -i | grep xdebug.remote
 
 RUN pecl install imagick && docker-php-ext-enable imagick
 
-RUN pecl install memcached \
-	 && docker-php-ext-enable memcached
+RUN pecl install memcached && docker-php-ext-enable memcached
 
-RUN pecl install redis \
-	&& docker-php-ext-enable redis
+RUN pecl install redis && docker-php-ext-enable redis
+
+RUN pecl install mongodb && docker-php-ext-enable mongodb
 
 RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin
 
@@ -129,7 +134,8 @@ RUN apt-get autoremove -y \
  	&& apt-get clean all \
  	&& rm -rf /var/lib/apt/lists/* \
  	&& rm -rf /usr/share/doc /usr/share/man /usr/share/locale \
- 	&& rm -rf /usr/src/php
+ 	&& rm -rf /usr/src/php \
+ 	&& rm -rf /tmp/pear
 
 RUN { \
 		echo 'opcache.memory_consumption=128'; \
