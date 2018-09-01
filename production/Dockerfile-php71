@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
 		libgmp3-dev \
 		libicu-dev \
 		libldap2-dev \
-		libpng12-dev \
+		libpng-dev \
 		libmcrypt-dev \
 		unixodbc-dev \
 		firebird-dev \
