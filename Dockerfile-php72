@@ -14,7 +14,6 @@ RUN apt-get update && apt-get install -y \
 		libicu-dev \
 		libldap2-dev \
 		libpng-dev \
-		libmcrypt-dev \
 		unixodbc-dev \
 		firebird-dev \
 		libpq-dev \
@@ -56,7 +55,7 @@ RUN docker-php-ext-configure gd --enable-gd-native-ttf --with-freetype-dir=/usr/
 RUN docker-php-ext-install gd
 
 RUN docker-php-ext-install bcmath bz2 calendar ctype curl dba dom enchant exif fileinfo ftp \
-gettext gmp hash intl json mbstring mcrypt mysqli  opcache  pcntl pdo  pdo_firebird pdo_mysql \
+gettext gmp hash intl json mbstring mysqli  opcache  pcntl pdo  pdo_firebird pdo_mysql \
 pdo_pgsql pdo_sqlite pgsql phar posix pspell readline recode session shmop simplexml snmp soap sockets \
 sysvmsg sysvsem sysvshm tidy tokenizer wddx xml xmlrpc xmlwriter xsl zip iconv interbase
 
