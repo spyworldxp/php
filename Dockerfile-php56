@@ -57,7 +57,7 @@ RUN docker-php-ext-install gd
 
 RUN docker-php-ext-install xmlreader bcmath bz2 calendar ctype curl dba dom enchant exif fileinfo ftp \
 gettext gmp hash intl json mbstring mcrypt mysqli  opcache  pcntl pdo  pdo_firebird pdo_mysql \
-pdo_pgsql pdo_sqlite pgsql phar posix pspell readline recode session shmop simplexml snmp soap sockets \
+pdo_pgsql pdo_sqlite pgsql posix pspell readline recode session shmop simplexml snmp soap sockets \
 sysvmsg sysvsem sysvshm tidy tokenizer wddx xml xmlrpc xmlwriter xsl zip iconv interbase mysql
 
 RUN curl -O https://raw.githubusercontent.com/davidgaya/docker-apache-php-oci/master/instantclient-basic-linux.x64-12.1.0.2.0.zip
