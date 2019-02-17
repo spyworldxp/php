@@ -84,8 +84,8 @@ sysvmsg sysvsem sysvshm tidy tokenizer wddx xml xmlrpc xmlwriter xsl zip iconv i
     && echo "xdebug.profiler_enable=0" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.remote_mode=req" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_host=172.17.0.1" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_port=9001" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_host=dockerhost" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_port=9000" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && cat /usr/local/etc/php/conf.d/xdebug.ini \
     && php -i | grep xdebug.remote \
@@ -115,5 +115,5 @@ RUN curl https://phar.phpunit.de/phpunit.phar -L > phpunit.phar && chmod +x phpu
 		echo 'opcache.enable_cli=1'; \
 	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
-EXPOSE 9000 9001
+EXPOSE 9000 9000
 CMD ["php-fpm"]
