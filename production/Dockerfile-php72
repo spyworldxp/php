@@ -115,5 +115,5 @@ RUN curl https://phar.phpunit.de/phpunit.phar -L > phpunit.phar && chmod +x phpu
 		echo 'opcache.enable_cli=1'; \
 	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
-EXPOSE 9000 9000
+EXPOSE 9000
 CMD ["php-fpm"]

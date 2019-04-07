@@ -117,5 +117,5 @@ RUN apt-get autoremove -y \
 		echo 'opcache.enable_cli=1'; \
 	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
-EXPOSE 9000 9000
+EXPOSE 9000
 CMD ["php-fpm"]
