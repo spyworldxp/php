@@ -126,7 +126,7 @@ RUN pecl install redis && docker-php-ext-enable redis
 
 RUN pecl install mongodb && docker-php-ext-enable mongodb
 
-RUN pecl install pdo_sqlsrv sqlsrv && docker-php-ext-enable pdo_sqlsrv sqlsrv
+RUN pecl install pdo_sqlsrv-5.3.0 sqlsrv-5.3.0 && docker-php-ext-enable pdo_sqlsrv sqlsrv
 
 RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin
 

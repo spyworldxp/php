@@ -137,7 +137,7 @@ RUN composer global require "squizlabs/php_codesniffer=*"
 
 RUN composer global require "phpmd/phpmd=@stable"
 
-RUN composer global require "phpunit/phpunit"
+RUN composer global require "phpunit/phpunit=^7.0"
 
 RUN composer global require "phpunit/dbunit"
 

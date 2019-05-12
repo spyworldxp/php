@@ -93,7 +93,7 @@ sysvmsg sysvsem sysvshm tidy tokenizer wddx xml xmlrpc xmlwriter xsl zip iconv i
     && pecl install memcached && docker-php-ext-enable memcached \
     && pecl install redis && docker-php-ext-enable redis \
     && pecl install mongodb && docker-php-ext-enable mongodb \
-    && pecl install pdo_sqlsrv sqlsrv && docker-php-ext-enable pdo_sqlsrv sqlsrv \
+    && pecl install pdo_sqlsrv-5.3.0 sqlsrv-5.3.0 && docker-php-ext-enable pdo_sqlsrv sqlsrv \
     && curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin
 
 ENV PATH /root/.composer/vendor/bin:$PATH
