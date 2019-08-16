@@ -94,7 +94,8 @@ sysvmsg sysvsem sysvshm tidy tokenizer wddx xml xmlrpc xmlwriter xsl zip iconv i
     && pecl install redis && docker-php-ext-enable redis \
     && pecl install mongodb && docker-php-ext-enable mongodb \
     && pecl install pdo_sqlsrv-5.3.0 sqlsrv-5.3.0 && docker-php-ext-enable pdo_sqlsrv sqlsrv \
-    && curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin
+    && curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin \
+    && mkdir /.composer
 
 ENV PATH /root/.composer/vendor/bin:$PATH
 ENV LD_LIBRARY_PATH /usr/local/instantclient_12_1/
