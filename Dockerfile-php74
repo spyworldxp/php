@@ -1,4 +1,4 @@
-FROM php:5.6-fpm
+FROM php:7.4-fpm
 
 MAINTAINER Clement Yuan <spyworldxp@gmail.com>
 
@@ -14,7 +14,6 @@ RUN apt-get update && apt-get install -y \
 		libicu-dev \
 		libldap2-dev \
 		libpng-dev \
-		libmcrypt-dev \
 		unixodbc-dev \
 		firebird-dev \
 		libpq-dev \
@@ -38,7 +37,9 @@ RUN apt-get update && apt-get install -y \
 		libmemcached-dev \
 		libmagickwand-dev \
 		poppler-utils \
-		ghostscript
+		ghostscript \
+		libzip-dev \
+		libmcrypt-dev
 
 RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h
 
@@ -52,13 +53,13 @@ RUN docker-php-ext-configure imap --with-imap --with-imap-ssl --with-kerberos
 RUN docker-php-ext-install imap
 RUN docker-php-ext-configure pdo_dblib --with-libdir=/lib/x86_64-linux-gnu
 RUN docker-php-ext-install pdo_dblib
-RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+RUN docker-php-ext-configure gd --enable-gd-native-ttf --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
 RUN docker-php-ext-install gd
 
-RUN docker-php-ext-install xmlreader bcmath bz2 calendar ctype curl dba dom enchant exif fileinfo ftp \
-gettext gmp hash intl json mbstring mcrypt mysqli  opcache  pcntl pdo  pdo_firebird pdo_mysql \
-pdo_pgsql pdo_sqlite pgsql posix pspell readline recode session shmop simplexml snmp soap sockets \
-sysvmsg sysvsem sysvshm tidy tokenizer wddx xml xmlrpc xmlwriter xsl zip iconv interbase mysql
+RUN docker-php-ext-install bcmath bz2 calendar ctype curl dba dom enchant exif fileinfo ftp \
+gettext gmp hash intl json mbstring mysqli  opcache  pcntl pdo  pdo_firebird pdo_mysql \
+pdo_pgsql pdo_sqlite pgsql phar posix pspell readline recode session shmop simplexml snmp soap sockets \
+sysvmsg sysvsem sysvshm tidy tokenizer wddx xml xmlrpc xmlwriter xsl zip iconv interbase
 
 RUN curl -O https://raw.githubusercontent.com/davidgaya/docker-apache-php-oci/master/instantclient-basic-linux.x64-12.1.0.2.0.zip
 RUN curl -O https://raw.githubusercontent.com/davidgaya/docker-apache-php-oci/master/instantclient-sdk-linux.x64-12.1.0.2.0.zip
@@ -79,8 +80,11 @@ RUN docker-php-ext-configure oci8 --with-oci8=instantclient,/usr/local/instantcl
 
 RUN docker-php-ext-install oci8
 
-RUN docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/usr/local/instantclient/,12.1
+RUN docker-php-ext-configure pdo_oci  --with-pdo-oci=instantclient,/usr/local/instantclient/,12.1
 RUN docker-php-ext-install pdo_oci
+
+# RUN sh -c "echo /usr/local/instantclient > /etc/ld.so.conf.d/oracle.conf"
+# RUN ldconfig
 
 RUN set -x \
     && cd /usr/src/php/ext/odbc \
@@ -93,7 +97,7 @@ RUN set -x \
 # && docker-php-ext-configure odbc --with-unixODBC=shared,/usr \
 # && docker-php-ext-install odbc
 
-# filter reflection spl standard 
+# filter reflection spl standard xmlreader
 # 		
 # 		libfreetype6-dev \
 # 		zip \
@@ -101,7 +105,7 @@ RUN set -x \
 #       libmemcached-dev \
 #       libmysqlclient18 \
 
-RUN pecl install xdebug-2.5.5 \
+RUN pecl install xdebug \
     && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.remote_autostart=0" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/xdebug.ini \
@@ -120,11 +124,13 @@ RUN php -i | grep xdebug.remote
 
 RUN pecl install imagick && docker-php-ext-enable imagick
 
-RUN pecl install memcached-2.2.0 && docker-php-ext-enable memcached
+RUN pecl install memcached && docker-php-ext-enable memcached
 
-RUN pecl install redis-4.3.0 && docker-php-ext-enable redis
+RUN pecl install redis && docker-php-ext-enable redis
 
 RUN pecl install mongodb && docker-php-ext-enable mongodb
+
+RUN pecl install mcrypt-1.0.2 && docker-php-ext-enable mcrypt
 
 RUN curl -L https://cs.symfony.com/download/php-cs-fixer-v2.phar -o /usr/local/bin/php-cs-fixer
 

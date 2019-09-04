@@ -146,7 +146,7 @@ RUN composer global require "phpunit/dbunit"
 
 RUN composer global require "phing/phing"
 
-RUN composer global require "phpdocumentor/phpdocumentor"
+# RUN composer global require "phpdocumentor/phpdocumentor"
 
 RUN composer global require "sebastian/phpcpd"
 

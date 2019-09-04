@@ -93,7 +93,7 @@ sysvmsg sysvsem sysvshm tidy tokenizer wddx xml xmlrpc xmlwriter xsl zip iconv i
 	&& php -i | grep xdebug.remote \
 	&& pecl install imagick && docker-php-ext-enable imagick \
 	&& pecl install memcached-2.2.0 && docker-php-ext-enable memcached \
-	&& pecl install redis && docker-php-ext-enable redis \
+	&& pecl install redis-4.3.0 && docker-php-ext-enable redis \
 	&& pecl install mongodb && docker-php-ext-enable mongodb \
 	&& curl -L https://cs.symfony.com/download/php-cs-fixer-v2.phar -o /usr/local/bin/php-cs-fixer \
 	&& chmod a+x /usr/local/bin/php-cs-fixer \

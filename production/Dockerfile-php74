@@ -1,4 +1,4 @@
-FROM php:7.3-fpm
+FROM php:7.4-fpm
 
 MAINTAINER Clement Yuan <spyworldxp@gmail.com>
 
@@ -100,22 +100,13 @@ sysvmsg sysvsem sysvshm tidy tokenizer wddx xml xmlrpc xmlwriter xsl zip iconv i
     && chmod a+x /usr/local/bin/php-cs-fixer \
     && pecl install mcrypt-1.0.2 && docker-php-ext-enable mcrypt \
     && curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin \
-    && composer global require "friendsofphp/php-cs-fixer" \
-    && composer global require "squizlabs/php_codesniffer=*" \
-    && composer global require "phpmd/phpmd=@stable" \
-    && composer global require "phpunit/phpunit=^7.0" \
-    && composer global require "phpunit/dbunit" \
-    && composer global require "phing/phing" \
-    # && composer global require "phpdocumentor/phpdocumentor" \
-    && composer global require "sebastian/phpcpd" \
-    && composer global require "phploc/phploc" \
-    && composer global require "laravel/installer"
-
+    && mkdir /.composer
 
 ENV PATH /root/.composer/vendor/bin:$PATH
 ENV LD_LIBRARY_PATH /usr/local/instantclient_12_1/
 
-RUN apt-get autoremove -y \
+RUN curl https://phar.phpunit.de/phpunit.phar -L > phpunit.phar && chmod +x phpunit.phar && mv phpunit.phar /usr/local/bin/phpunit \
+    && apt-get autoremove -y \
  	&& apt-get clean all \
  	&& rm -rf /var/lib/apt/lists/* \
  	&& rm -rf /usr/share/doc /usr/share/man /usr/share/locale \
