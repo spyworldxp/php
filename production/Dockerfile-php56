@@ -95,6 +95,8 @@ sysvmsg sysvsem sysvshm tidy tokenizer wddx xml xmlrpc xmlwriter xsl zip iconv i
 	&& pecl install memcached-2.2.0 && docker-php-ext-enable memcached \
 	&& pecl install redis && docker-php-ext-enable redis \
 	&& pecl install mongodb && docker-php-ext-enable mongodb \
+	&& curl -L https://cs.symfony.com/download/php-cs-fixer-v2.phar -o /usr/local/bin/php-cs-fixer \
+	&& chmod a+x /usr/local/bin/php-cs-fixer \
 	&& curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin \
 	&& mkdir /.composer
 
