@@ -130,13 +130,15 @@ RUN pecl install pdo_sqlsrv-5.3.0 sqlsrv-5.3.0 && docker-php-ext-enable pdo_sqls
 
 RUN curl -L https://cs.symfony.com/download/php-cs-fixer-v2.phar -o /usr/local/bin/php-cs-fixer
 
-RUN chmod a+x php-cs-fixer
+RUN chmod a+x /usr/local/bin/php-cs-fixer
 
 RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin
 
 ENV PATH /root/.composer/vendor/bin:$PATH
 
 RUN mkdir /.composer
+
+RUN chmod 777 /.composer
 
 ENV LD_LIBRARY_PATH /usr/local/instantclient_12_1/
 
