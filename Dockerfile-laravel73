@@ -39,7 +39,8 @@ RUN apt-get update && apt-get install -y \
 		poppler-utils \
 		ghostscript \
 		libzip-dev \
-		libmcrypt-dev
+		libmcrypt-dev \
+		git
 
 RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h
 
@@ -64,6 +65,10 @@ sysvmsg sysvsem sysvshm tidy tokenizer wddx xml xmlrpc xmlwriter xsl zip iconv i
 RUN curl -O https://raw.githubusercontent.com/davidgaya/docker-apache-php-oci/master/instantclient-basic-linux.x64-12.1.0.2.0.zip
 RUN curl -O https://raw.githubusercontent.com/davidgaya/docker-apache-php-oci/master/instantclient-sdk-linux.x64-12.1.0.2.0.zip
 RUN curl -O https://raw.githubusercontent.com/davidgaya/docker-apache-php-oci/master/instantclient-sqlplus-linux.x64-12.1.0.2.0.zip
+
+RUN curl https://get.symfony.com/cli/installer | bash
+RUN mv /root/.symfony/bin/symfony /usr/local/bin/symfony
+RUN chmod +x /usr/local/bin/symfony
 
 RUN unzip instantclient-basic-linux.x64-12.1.0.2.0.zip -d /usr/local/
 RUN unzip instantclient-sdk-linux.x64-12.1.0.2.0.zip -d /usr/local/
@@ -153,6 +158,8 @@ RUN composer global require "sebastian/phpcpd"
 RUN composer global require "phploc/phploc"
 
 RUN composer global require "laravel/installer"
+
+RUN composer global require "emielmolenaar/phpcs-laravel"
 
 ENV PATH /root/.composer/vendor/bin:$PATH
 

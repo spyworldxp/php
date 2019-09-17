@@ -40,6 +40,7 @@ RUN apt-get update && apt-get install -y \
 		ghostscript \
         libzip-dev \
         libmcrypt-dev \
+        git \
     && ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h \
     && docker-php-source extract \
     && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu \
@@ -59,6 +60,9 @@ sysvmsg sysvsem sysvshm tidy tokenizer wddx xml xmlrpc xmlwriter xsl zip iconv i
     && curl -O https://raw.githubusercontent.com/davidgaya/docker-apache-php-oci/master/instantclient-basic-linux.x64-12.1.0.2.0.zip \
     && curl -O https://raw.githubusercontent.com/davidgaya/docker-apache-php-oci/master/instantclient-sdk-linux.x64-12.1.0.2.0.zip \
     && curl -O https://raw.githubusercontent.com/davidgaya/docker-apache-php-oci/master/instantclient-sqlplus-linux.x64-12.1.0.2.0.zip \
+    && curl https://get.symfony.com/cli/installer | bash \
+    && mv /root/.symfony/bin/symfony /usr/local/bin/symfony \
+    && chmod +x /usr/local/bin/symfony \
     && unzip instantclient-basic-linux.x64-12.1.0.2.0.zip -d /usr/local/ \
     && unzip instantclient-sdk-linux.x64-12.1.0.2.0.zip -d /usr/local/ \
     && unzip instantclient-sqlplus-linux.x64-12.1.0.2.0.zip -d /usr/local/ \
@@ -109,7 +113,8 @@ sysvmsg sysvsem sysvshm tidy tokenizer wddx xml xmlrpc xmlwriter xsl zip iconv i
     # && composer global require "phpdocumentor/phpdocumentor" \
     && composer global require "sebastian/phpcpd" \
     && composer global require "phploc/phploc" \
-    && composer global require "laravel/installer"
+    && composer global require "laravel/installer" \
+    && composer global require "emielmolenaar/phpcs-laravel"
 
 
 ENV PATH /root/.composer/vendor/bin:$PATH
