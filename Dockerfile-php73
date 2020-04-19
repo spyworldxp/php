@@ -98,7 +98,7 @@ RUN set -x \
 # && docker-php-ext-install odbc
 
 # filter reflection spl standard xmlreader
-# 		
+#
 # 		libfreetype6-dev \
 # 		zip \
 #       git \
@@ -121,6 +121,8 @@ RUN pecl install xdebug \
 # for confirmation
 RUN cat /usr/local/etc/php/conf.d/xdebug.ini
 RUN php -i | grep xdebug.remote
+
+RUN pecl install pcov
 
 RUN pecl install imagick && docker-php-ext-enable imagick
 

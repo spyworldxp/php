@@ -96,6 +96,7 @@ sysvmsg sysvsem sysvshm tidy tokenizer wddx xml xmlrpc xmlwriter xsl zip iconv i
     && echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && cat /usr/local/etc/php/conf.d/xdebug.ini \
     && php -i | grep xdebug.remote \
+    && pecl install pcov \
     && pecl install imagick && docker-php-ext-enable imagick \
     && pecl install memcached && docker-php-ext-enable memcached \
     && pecl install redis && docker-php-ext-enable redis \
