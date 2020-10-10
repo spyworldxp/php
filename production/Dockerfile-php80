@@ -1,0 +1,78 @@
+FROM alpine:3.12.0
+
+MAINTAINER Clement Yuan <spyworldxp@gmail.com>
+
+RUN apk add curl \
+        autoconf \
+        bison \
+        re2c \
+        autoconf \
+        make \
+        build-base \
+        pkgconfig \
+        libxml2-dev \
+        sqlite-dev \
+        openssl-dev \
+        curl-dev \
+        libpng-dev \
+        icu-dev \
+        oniguruma-dev \
+        unixodbc-dev \
+        libxslt-dev \
+        libzip-dev \
+        gd-dev \
+        libedit-dev \
+        libmemcached-dev
+
+RUN cd /home
+RUN curl -L -O https://github.com/php/php-src/archive/master.zip
+RUN unzip master.zip
+RUN cd php-src-master/
+
+RUN ./buildconf
+
+RUN ./configure \
+        --enable-fpm  \
+        --enable-phpdbg  \
+        --enable-gcov  \
+        --with-openssl  \
+        --with-system-ciphers  \
+        --with-zlib  \
+        --enable-bcmath   \
+        --with-curl   \
+        --enable-exif  \
+        --enable-ftp  \
+        --enable-gd  -with-mhash   \
+        --enable-intl  \
+        --enable-mbstring  \
+        --with-mysqli  \
+        --with-unixODBC  \
+        --with-xsl     \
+        --with-zip          \
+        --with-pear \
+        --enable-ftp \
+        --enable-mysqlnd \
+        --with-external-gd \
+        --with-freetype \
+        --with-libedit \
+        --enable-soap \
+        --enable-pcntl \
+        --enable-opcache \
+        --enable-sockets \
+        && make -j4
+
+RUN cp /home/php-src-master/php.ini-production /usr/local/lib \
+    && cp /home/php-src-master/php.ini-development /usr/local/lib/php.ini
+
+RUN pecl install pcov \
+    && echo "extension=pcov.so" >> /usr/local/lib/php.ini \
+    && pecl install memcached \
+    && echo "extension=memcached.so" >> /usr/local/lib/php.ini \
+    && curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin \
+    && mkdir /.composer \
+    && chmod 777 /.composer
+ENV PATH /root/.composer/vendor/bin:$PATH
+
+
+EXPOSE 9000
+CMD ["php-fpm"]
