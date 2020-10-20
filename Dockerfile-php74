@@ -39,7 +39,8 @@ RUN apt-get update && apt-get install -y \
 		poppler-utils \
 		ghostscript \
 		libzip-dev \
-		libmcrypt-dev
+		libmcrypt-dev \
+		libonig-dev
 
 RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h
 
@@ -57,9 +58,9 @@ RUN docker-php-ext-configure gd
 RUN docker-php-ext-install gd
 
 RUN docker-php-ext-install bcmath bz2 calendar ctype curl dba dom enchant exif fileinfo ftp \
-gettext gmp hash intl json mbstring mysqli  opcache  pcntl pdo  pdo_firebird pdo_mysql \
-pdo_pgsql pdo_sqlite pgsql phar posix pspell readline recode session shmop simplexml snmp soap sockets \
-sysvmsg sysvsem sysvshm tidy tokenizer wddx xml xmlrpc xmlwriter xsl zip iconv interbase
+gettext gmp intl json mbstring mysqli  opcache  pcntl pdo  pdo_firebird pdo_mysql \
+pdo_pgsql pdo_sqlite pgsql phar posix pspell readline session shmop simplexml snmp soap sockets \
+sysvmsg sysvsem sysvshm tidy tokenizer xml xmlrpc xmlwriter xsl zip iconv
 
 RUN curl -O https://raw.githubusercontent.com/davidgaya/docker-apache-php-oci/master/instantclient-basic-linux.x64-12.1.0.2.0.zip
 RUN curl -O https://raw.githubusercontent.com/davidgaya/docker-apache-php-oci/master/instantclient-sdk-linux.x64-12.1.0.2.0.zip
@@ -132,7 +133,7 @@ RUN pecl install redis && docker-php-ext-enable redis
 
 RUN pecl install mongodb && docker-php-ext-enable mongodb
 
-RUN pecl install mcrypt-1.0.2 && docker-php-ext-enable mcrypt
+RUN pecl install mcrypt-1.0.3 && docker-php-ext-enable mcrypt
 
 RUN curl -L https://cs.symfony.com/download/php-cs-fixer-v2.phar -o /usr/local/bin/php-cs-fixer
 
