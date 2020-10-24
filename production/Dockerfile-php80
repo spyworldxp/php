@@ -29,7 +29,7 @@ RUN curl -L -O https://github.com/php/php-src/archive/master.zip
 RUN unzip master.zip
 RUN cd php-src-master/
 
-RUN buildconf && ./configure \
+RUN ./buildconf && ./configure \
         --enable-fpm  \
         --enable-phpdbg  \
         --enable-gcov  \
