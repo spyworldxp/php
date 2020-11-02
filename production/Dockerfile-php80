@@ -24,29 +24,25 @@ RUN apk add curl \
         libedit-dev \
         libmemcached-dev
 
-RUN cd /home
-RUN curl -L -O https://github.com/php/php-src/archive/master.zip
-RUN unzip master.zip
-RUN cd php-src-master/
-
-RUN ./buildconf && ./configure \
-        --enable-fpm  \
-        --enable-phpdbg  \
-        --enable-gcov  \
-        --with-openssl  \
-        --with-system-ciphers  \
-        --with-zlib  \
-        --enable-bcmath   \
-        --with-curl   \
-        --enable-exif  \
-        --enable-ftp  \
-        --enable-gd  -with-mhash   \
-        --enable-intl  \
-        --enable-mbstring  \
-        --with-mysqli  \
-        --with-unixODBC  \
-        --with-xsl     \
-        --with-zip          \
+RUN cd /home && curl -L -O https://github.com/php/php-src/archive/master.zip && unzip master.zip
+RUN cd /home/php-src-master/ && ./buildconf && ./configure \
+        --enable-fpm \
+        --enable-phpdb \
+        --enable-gco \
+        --with-openss \
+        --with-system-cipher \
+        --with-zli \
+        --enable-bcmath \
+        --with-curl \
+        --enable-exi \
+        --enable-ft \
+        --enable-gd  -with-mhash \
+        --enable-int \
+        --enable-mbstrin \
+        --with-mysql \
+        --with-unixODB \
+        --with-xsl \
+        --with-zip \
         --with-pear \
         --enable-ftp \
         --enable-mysqlnd \
@@ -70,7 +66,6 @@ RUN pecl install pcov \
     && mkdir /.composer \
     && chmod 777 /.composer
 ENV PATH /root/.composer/vendor/bin:$PATH
-
 
 EXPOSE 9000
 CMD ["php-fpm"]
