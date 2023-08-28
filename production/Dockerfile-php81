@@ -3,6 +3,7 @@ FROM php:8.1-fpm
 MAINTAINER Clement Yuan <spyworldxp@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
+ENV LD_LIBRARY_PATH /usr/local/instantclient
 
 RUN apt-get update && apt-get install -y \
         wget \
@@ -38,6 +39,7 @@ RUN apt-get update && apt-get install -y \
         libmemcached-dev \
         libmcrypt-dev \
         libargon2-dev \
+        libaio1 \
     && ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h \
     && docker-php-source extract \
     && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu \
@@ -51,22 +53,21 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd \
       --disable-gd-jis-conv --with-freetype=/usr --with-jpeg=/usr --with-webp=/usr   --with-xpm=/usr \
     && docker-php-ext-install gd \
-    && docker-php-ext-install bcmath bz2 calendar ctype curl dba dl_test dom enchant exif ffi fileinfo filter ftp gettext gmp iconv imap mbstring mysqli opcache pcntl pdo pdo_firebird pdo_mysql pdo_pgsql pdo_sqlite pgsql phar posix pspell session shmop simplexml snmp soap sockets sodium sysvmsg sysvsem sysvshm tidy xml xmlwriter xsl zend_test zip intl \
-    && curl -O https://raw.githubusercontent.com/davidgaya/docker-apache-php-oci/master/instantclient-basic-linux.x64-12.1.0.2.0.zip \
-    && curl -O https://raw.githubusercontent.com/davidgaya/docker-apache-php-oci/master/instantclient-sdk-linux.x64-12.1.0.2.0.zip \
-    && curl -O https://raw.githubusercontent.com/davidgaya/docker-apache-php-oci/master/instantclient-sqlplus-linux.x64-12.1.0.2.0.zip \
-    && unzip instantclient-basic-linux.x64-12.1.0.2.0.zip -d /usr/local/ \
-    && unzip instantclient-sdk-linux.x64-12.1.0.2.0.zip -d /usr/local/ \
-    && unzip instantclient-sqlplus-linux.x64-12.1.0.2.0.zip -d /usr/local/ \
-    && rm instantclient-basic-linux.x64-12.1.0.2.0.zip \
-    && rm instantclient-sdk-linux.x64-12.1.0.2.0.zip \
-    && rm instantclient-sqlplus-linux.x64-12.1.0.2.0.zip \
-    && ln -s /usr/local/instantclient_12_1 /usr/local/instantclient \
-    && ln -s /usr/local/instantclient/libclntsh.so.12.1 /usr/local/instantclient/libclntsh.so \
+    && docker-php-ext-install bcmath bz2 calendar ctype curl dba dl_test dom enchant exif ffi fileinfo filter ftp gettext gmp iconv imap mbstring mysqli opcache pcntl pdo pdo_firebird pdo_mysql pdo_pgsql pdo_sqlite pgsql phar posix pspell session shmop simplexml snmp soap sockets sodium sysvmsg sysvsem sysvshm tidy xml xmlwriter xsl zip intl \
+    && curl -O https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-basic-linux.x64-21.11.0.0.0dbru.zip \
+    && curl -O https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-sdk-linux.x64-21.11.0.0.0dbru.zip \
+    && curl -O https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-sqlplus-linux.x64-21.11.0.0.0dbru.zip \
+    && unzip instantclient-basic-linux.x64-21.11.0.0.0dbru.zip -d /usr/local/ \
+    && unzip instantclient-sdk-linux.x64-21.11.0.0.0dbru.zip -d /usr/local/ \
+    && unzip instantclient-sqlplus-linux.x64-21.11.0.0.0dbru.zip -d /usr/local/ \
+    && rm instantclient-basic-linux.x64-21.11.0.0.0dbru.zip \
+    && rm instantclient-sdk-linux.x64-21.11.0.0.0dbru.zip \
+    && rm instantclient-sqlplus-linux.x64-21.11.0.0.0dbru.zip \
+    && ln -s /usr/local/instantclient_21_11 /usr/local/instantclient \
     && ln -s /usr/local/instantclient/sqlplus /usr/bin/sqlplus \
     && docker-php-ext-configure oci8 --with-oci8=instantclient,/usr/local/instantclient \
     && docker-php-ext-install oci8 \
-    && docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/usr/local/instantclient/,12.1 \
+    && docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/usr/local/instantclient/ \
     && docker-php-ext-install pdo_oci \
     && set -x \
     && cd /usr/src/php/ext/odbc \
@@ -88,17 +89,13 @@ RUN apt-get update && apt-get install -y \
     && pecl install memcached && docker-php-ext-enable memcached \
     && pecl install redis && docker-php-ext-enable redis \
     && pecl install mongodb && docker-php-ext-enable mongodb \
-    && curl -L https://cs.symfony.com/download/php-cs-fixer-v2.phar -o /usr/local/bin/php-cs-fixer \
+    && curl -L https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/releases/download/v3.23.0/php-cs-fixer.phar -o /usr/local/bin/php-cs-fixer \
     && chmod a+x /usr/local/bin/php-cs-fixer \
     && pecl install mcrypt && docker-php-ext-enable mcrypt \
     && curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin \
     && mkdir /.composer \
-    && chmod 777 /.composer
-
-ENV PATH /root/.composer/vendor/bin:$PATH
-ENV LD_LIBRARY_PATH /usr/local/instantclient_12_1/
-
-RUN curl https://phar.phpunit.de/phpunit.phar -L > phpunit.phar && chmod +x phpunit.phar && mv phpunit.phar /usr/local/bin/phpunit \
+    && chmod 777 /.composer \
+    && curl https://phar.phpunit.de/phpunit.phar -L > phpunit.phar && chmod +x phpunit.phar && mv phpunit.phar /usr/local/bin/phpunit \
     && apt-get autoremove -y \
     && apt-get clean all \
     && rm -rf /var/lib/apt/lists/* \
@@ -113,6 +110,8 @@ RUN curl https://phar.phpunit.de/phpunit.phar -L > phpunit.phar && chmod +x phpu
         echo 'opcache.fast_shutdown=1'; \
         echo 'opcache.enable_cli=1'; \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini
+
+ENV PATH /root/.composer/vendor/bin:/usr/local/instantclient_21_11:$PATH
 
 EXPOSE 9000
 CMD ["php-fpm"]
