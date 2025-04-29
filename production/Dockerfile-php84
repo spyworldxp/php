@@ -2,8 +2,7 @@ FROM php:8.4-fpm
 
 MAINTAINER Clement Yuan <spyworldxp@gmail.com>
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV LD_LIBRARY_PATH /usr/local/instantclient
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
         wget \
@@ -46,29 +45,12 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install ldap \
     && docker-php-ext-configure pdo_odbc  --with-pdo-odbc=unixODBC,/usr/ \
     && docker-php-ext-install pdo_odbc \
-    && docker-php-ext-configure imap --with-imap --with-imap-ssl --with-kerberos \
-    && docker-php-ext-install imap \
     && docker-php-ext-configure pdo_dblib --with-libdir=/lib/x86_64-linux-gnu \
     && docker-php-ext-install pdo_dblib \
     && docker-php-ext-configure gd \
       --disable-gd-jis-conv --with-freetype=/usr --with-jpeg=/usr --with-webp=/usr   --with-xpm=/usr \
     && docker-php-ext-install gd \
-    && docker-php-ext-install bcmath bz2 calendar ctype curl dba dl_test dom enchant exif ffi fileinfo filter ftp gettext gmp iconv imap mbstring mysqli opcache pcntl pdo pdo_firebird pdo_mysql pdo_pgsql pdo_sqlite pgsql phar posix pspell session shmop simplexml snmp soap sockets sodium sysvmsg sysvsem sysvshm tidy xml xmlwriter xsl zip intl \
-    && curl -O https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-basic-linux.x64-21.11.0.0.0dbru.zip \
-    && curl -O https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-sdk-linux.x64-21.11.0.0.0dbru.zip \
-    && curl -O https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-sqlplus-linux.x64-21.11.0.0.0dbru.zip \
-    && unzip instantclient-basic-linux.x64-21.11.0.0.0dbru.zip -d /usr/local/ \
-    && unzip instantclient-sdk-linux.x64-21.11.0.0.0dbru.zip -d /usr/local/ \
-    && unzip instantclient-sqlplus-linux.x64-21.11.0.0.0dbru.zip -d /usr/local/ \
-    && rm instantclient-basic-linux.x64-21.11.0.0.0dbru.zip \
-    && rm instantclient-sdk-linux.x64-21.11.0.0.0dbru.zip \
-    && rm instantclient-sqlplus-linux.x64-21.11.0.0.0dbru.zip \
-    && ln -s /usr/local/instantclient_21_11 /usr/local/instantclient \
-    && ln -s /usr/local/instantclient/sqlplus /usr/bin/sqlplus \
-    && docker-php-ext-configure oci8 --with-oci8=instantclient,/usr/local/instantclient \
-    && docker-php-ext-install oci8 \
-    && docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/usr/local/instantclient/ \
-    && docker-php-ext-install pdo_oci \
+    && docker-php-ext-install bcmath bz2 calendar ctype curl dba dl_test dom enchant exif ffi fileinfo filter ftp gettext gmp iconv mbstring mysqli opcache pcntl pdo pdo_firebird pdo_mysql pdo_pgsql pdo_sqlite pgsql  posix  session shmop simplexml snmp soap sockets sodium sysvmsg sysvsem sysvshm tidy xml xmlwriter xsl zip intl \
     && set -x \
     && cd /usr/src/php/ext/odbc \
     && phpize \
@@ -91,7 +73,6 @@ RUN apt-get update && apt-get install -y \
     && pecl install mongodb && docker-php-ext-enable mongodb \
     && curl -L https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/releases/download/v3.23.0/php-cs-fixer.phar -o /usr/local/bin/php-cs-fixer \
     && chmod a+x /usr/local/bin/php-cs-fixer \
-    && pecl install mcrypt && docker-php-ext-enable mcrypt \
     && curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/bin \
     && mkdir /.composer \
     && chmod 777 /.composer \
